@@ -339,11 +339,11 @@
     .to(".scroll-cue", { opacity: 1, duration: 0.4 }, "-=0.1");
 
   // Hero parallax out
-  gsap.to(".hero-content", { yPercent: -25, autoAlpha: 0, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "70% top", scrub: true } });
+  gsap.to(".hero-content", { yPercent: -25, autoAlpha: 0, ease: "none", scrollTrigger: { trigger: ".hero", start: "30% top", end: "90% top", scrub: true } });
   gsap.to(".scroll-cue", { autoAlpha: 0, ease: "none", scrollTrigger: { trigger: ".hero", start: "8% top", end: "20% top", scrub: true } });
 
   /* ══════════════════════════════════
-     PROBLEM
+     PROBLEM — with letter-by-letter phrase cycling (Effect 009)
      ══════════════════════════════════ */
   const pTl = gsap.timeline({ scrollTrigger: { trigger: ".section-problem", start: "top 60%", toggleActions: "play none none none" }, defaults: { ease: "power3.out" } });
   pTl
@@ -356,20 +356,60 @@
     gsap.to(f, { width: f.dataset.w + "%", duration: 1.4, ease: "power2.out", scrollTrigger: { trigger: f, start: "top 88%", toggleActions: "play none none none" } });
   });
 
+  // Phrase cycling with letter animation
+  const phrases = document.querySelectorAll(".phrase-item");
+  if (phrases.length > 1) {
+    // Split each phrase into individual letter spans
+    phrases.forEach((p) => {
+      const text = p.textContent;
+      p.innerHTML = "";
+      text.split("").forEach((ch) => {
+        const span = document.createElement("span");
+        span.textContent = ch === " " ? "\u00A0" : ch;
+        span.style.display = "inline-block";
+        span.style.opacity = "0";
+        span.style.transform = "translateY(15px)";
+        p.appendChild(span);
+      });
+      p.style.opacity = "1";
+      p.style.transform = "none";
+    });
+    // Show first phrase letters
+    gsap.to(phrases[0].children, { opacity: 1, y: 0, stagger: 0.03, duration: 0.3, delay: 1.5 });
+    let phraseIdx = 0;
+    setInterval(() => {
+      const current = phrases[phraseIdx];
+      phraseIdx = (phraseIdx + 1) % phrases.length;
+      const next = phrases[phraseIdx];
+      // Fade out current letters
+      gsap.to(current.children, { opacity: 0, y: -15, stagger: 0.02, duration: 0.25, ease: "power2.in" });
+      // Fade in next letters
+      gsap.fromTo(next.children, { opacity: 0, y: 15 }, { opacity: 1, y: 0, stagger: 0.02, duration: 0.3, delay: 0.3, ease: "power2.out" });
+    }, 3000);
+  }
+
   /* ══════════════════════════════════
-     CAPABILITIES — Staggered card entrance + tilt
+     CAPABILITIES — Stacked fan-out on scroll (Effect 001)
      ══════════════════════════════════ */
   const capTl = gsap.timeline({ scrollTrigger: { trigger: ".section-caps", start: "top 65%", toggleActions: "play none none none" }, defaults: { ease: "power3.out" } });
   capTl
     .to(".caps-header .label", { opacity: 1, duration: 0.4 })
     .to(".caps-header .rt-inner", { y: "0%", duration: 0.8, stagger: 0.12 }, "-=0.15");
 
-  ScrollTrigger.batch(".cap-card", {
-    start: "top 88%",
-    onEnter: (els) => {
-      gsap.from(els, { y: 60, rotationX: -8, autoAlpha: 0, duration: 0.9, stagger: 0.15, ease: "power3.out", transformPerspective: 1000 });
-    },
-  });
+  // Fan-out: cards start stacked and spread on scroll
+  const capCards = gsap.utils.toArray(".cap-card");
+  if (capCards.length) {
+    // Initial stacked state
+    capCards.forEach((card, i) => {
+      gsap.set(card, { autoAlpha: 0, y: 80 + i * 15, rotate: (i - 1.5) * 2, scale: 0.95 });
+    });
+    // Fan out as user scrolls into view
+    gsap.timeline({
+      scrollTrigger: { trigger: ".caps-grid", start: "top 85%", end: "top 30%", scrub: 0.8 }
+    }).to(capCards, {
+      autoAlpha: 1, y: 0, rotate: 0, scale: 1, stagger: 0.1, duration: 0.5, ease: "power3.out"
+    });
+  }
 
   // Card tilt + glow
   document.querySelectorAll("[data-tilt]").forEach((card) => {
@@ -416,36 +456,83 @@
       },
     });
 
-    // Scene 0 → 1
-    howTl
-      .to(scenes[0].querySelector(".how-scene-content"), { autoAlpha: 0, y: -30, duration: 0.12 }, 0.25)
-      .to(scenes[0].querySelector(".how-scene-visual"), { autoAlpha: 0, scale: 0.9, duration: 0.1 }, 0.28)
-      .set(scenes[0], { autoAlpha: 0 }, 0.32)
-      .set(scenes[1], { autoAlpha: 1, visibility: "visible" }, 0.32)
-      .fromTo(scenes[1].querySelector(".how-scene-content"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.15 }, 0.33)
-      .fromTo(scenes[1].querySelector(".how-scene-visual"), { autoAlpha: 0, scale: 1.1 }, { autoAlpha: 1, scale: 1, duration: 0.15 }, 0.35)
+    // Progressive reveal helper — words slide in one by one (Effect 006)
+    function progressiveReveal(scene, tl, showAt, hideAt) {
+      const desc = scene.querySelector(".hsc-desc");
+      const title = scene.querySelector(".hsc-title");
+      const num = scene.querySelector(".hsc-number");
+      const facts = scene.querySelector(".hsc-facts");
+      const visual = scene.querySelector(".how-scene-visual");
 
-    // Scene 1 → 2
-      .to(scenes[1].querySelector(".how-scene-content"), { autoAlpha: 0, y: -30, duration: 0.12 }, 0.58)
-      .to(scenes[1].querySelector(".how-scene-visual"), { autoAlpha: 0, scale: 0.9, duration: 0.1 }, 0.61)
-      .set(scenes[1], { autoAlpha: 0 }, 0.65)
-      .set(scenes[2], { autoAlpha: 1, visibility: "visible" }, 0.65)
-      .fromTo(scenes[2].querySelector(".how-scene-content"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.15 }, 0.66)
-      .fromTo(scenes[2].querySelector(".how-scene-visual"), { autoAlpha: 0, scale: 1.1 }, { autoAlpha: 1, scale: 1, duration: 0.15 }, 0.68);
+      // Split desc into word spans
+      if (desc && !desc.dataset.split) {
+        desc.dataset.split = "1";
+        const words = desc.textContent.trim().split(/\s+/);
+        desc.innerHTML = words.map((w) => '<span class="hw">' + w + "</span>").join(" ");
+      }
+      const wordSpans = desc ? desc.querySelectorAll(".hw") : [];
+
+      // Show scene
+      tl.set(scene, { autoAlpha: 1, visibility: "visible" }, showAt);
+
+      // Number + title slide in
+      tl.fromTo(num, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.06 }, showAt);
+      tl.fromTo(title, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.08 }, showAt + 0.02);
+
+      // Words reveal progressively
+      if (wordSpans.length) {
+        gsap.set(wordSpans, { opacity: 0, y: 10 });
+        tl.to(wordSpans, { opacity: 1, y: 0, stagger: 0.005, duration: 0.08, ease: "power2.out" }, showAt + 0.04);
+      }
+
+      // Facts + visual
+      tl.fromTo(facts, { autoAlpha: 0, y: 15 }, { autoAlpha: 1, y: 0, duration: 0.06 }, showAt + 0.1);
+      tl.fromTo(visual, { autoAlpha: 0, scale: 1.05 }, { autoAlpha: 1, scale: 1, duration: 0.1 }, showAt + 0.03);
+
+      // Hide scene
+      if (hideAt !== null) {
+        tl.to(scene.querySelector(".how-scene-content"), { autoAlpha: 0, y: -30, duration: 0.1 }, hideAt);
+        tl.to(visual, { autoAlpha: 0, scale: 0.9, duration: 0.08 }, hideAt + 0.02);
+        tl.set(scene, { autoAlpha: 0 }, hideAt + 0.08);
+      }
+    }
+
+    // Scene 0 (starts visible)
+    progressiveReveal(scenes[0], howTl, 0.01, 0.28);
+    // Scene 1
+    progressiveReveal(scenes[1], howTl, 0.32, 0.6);
+    // Scene 2
+    progressiveReveal(scenes[2], howTl, 0.65, null);
   }
 
   /* ══════════════════════════════════
-     PROOF
+     PROOF — Cards slide in from sides + enhanced ticker (Effect 008)
      ══════════════════════════════════ */
   const prTl = gsap.timeline({ scrollTrigger: { trigger: ".section-proof", start: "top 65%", toggleActions: "play none none none" }, defaults: { ease: "power3.out" } });
   prTl
     .to(".section-proof .label", { opacity: 1, duration: 0.4 })
     .to(".section-proof .rt-inner", { y: "0%", duration: 0.8, stagger: 0.12 }, "-=0.15");
 
-  ScrollTrigger.batch(".proof-card", {
-    start: "top 88%",
-    onEnter: (els) => gsap.from(els, { y: 50, rotationX: -10, autoAlpha: 0, duration: 0.8, stagger: 0.1, ease: "power3.out", transformPerspective: 800 }),
+  // Proof cards fan in from alternating sides
+  const proofCards = gsap.utils.toArray(".proof-card");
+  proofCards.forEach((card, i) => {
+    gsap.set(card, { autoAlpha: 0, x: i % 2 === 0 ? -60 : 60, rotateY: i % 2 === 0 ? 15 : -15 });
+    gsap.to(card, {
+      autoAlpha: 1, x: 0, rotateY: 0, duration: 1, ease: "power3.out", transformPerspective: 800,
+      scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none none" }
+    });
   });
+
+  // Enhanced ticker — smooth GSAP-driven scroll with hover pause
+  const tickerTrack = document.querySelector(".ticker-track");
+  if (tickerTrack) {
+    const tickerTween = gsap.to(tickerTrack, { xPercent: -50, duration: 25, ease: "none", repeat: -1 });
+    const tickerWrap = document.querySelector(".ticker-wrap");
+    if (tickerWrap) {
+      tickerWrap.addEventListener("mouseenter", () => gsap.to(tickerTween, { timeScale: 0, duration: 0.5 }));
+      tickerWrap.addEventListener("mouseleave", () => gsap.to(tickerTween, { timeScale: 1, duration: 0.5 }));
+    }
+  }
 
   // Counters
   function counter(el) {

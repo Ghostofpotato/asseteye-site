@@ -90,9 +90,9 @@ a{color:inherit;text-decoration:none;cursor:none}
 /* ══════════════════════════════════
    PROBLEM
    ══════════════════════════════════ */
-.section-problem{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:var(--bg)}
+.section-problem{position:relative;min-height:auto;padding:6rem 0;display:flex;align-items:center;overflow:hidden;background:var(--bg)}
 .problem-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
-.problem-left h2{margin-bottom:1.5rem}
+.problem-left h2{margin-bottom:1.5rem;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;letter-spacing:-.04em;line-height:1.05}
 
 .p-stat{opacity:0;transform:translateX(-20px);margin-bottom:2rem}
 .p-stat:last-child{margin-bottom:0}
@@ -101,14 +101,19 @@ a{color:inherit;text-decoration:none;cursor:none}
 .p-stat-fill{height:100%;width:0;background:linear-gradient(90deg,#ff3b4f,rgba(255,59,79,.3));border-radius:2px}
 .p-stat p{font-size:.8rem;color:var(--dim)}
 
+/* Problem phrase cycling */
+.problem-phrases{position:relative;height:2.5rem;overflow:hidden;margin-top:1.5rem}
+.phrase-item{position:absolute;inset:0;font-size:1.1rem;font-weight:700;color:var(--accent);opacity:0;transform:translateY(20px);white-space:nowrap}
+.phrase-item.active{opacity:1;transform:translateY(0)}
+
 @media(max-width:768px){.problem-layout{grid-template-columns:1fr;gap:3rem}}
 
 /* ══════════════════════════════════
    CAPABILITIES — Interactive Cards
    ══════════════════════════════════ */
-.section-caps{position:relative;padding:10rem 0;overflow:hidden;background:var(--bg)}
-.caps-header{text-align:center;margin-bottom:5rem}
-.caps-header h2{margin-bottom:0}
+.section-caps{position:relative;padding:5rem 0;overflow:hidden;background:var(--bg)}
+.caps-header{text-align:center;margin-bottom:3.5rem}
+.caps-header h2{margin-bottom:0;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;letter-spacing:-.04em;line-height:1.05}
 
 .caps-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
 
@@ -180,9 +185,38 @@ a{color:inherit;text-decoration:none;cursor:none}
 .cap-card:hover .cap-img{filter:brightness(.75) saturate(1);transition:filter .4s}
 
 /* How-it-works images */
-.act-intel-visual{position:relative;width:320px;height:320px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--card-border)}
-.how-img{width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.7)}
-.how-img-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(241,246,249,.7) 100%);pointer-events:none}
+/* Deploy fleet — 3D drones + Scandinavian house */
+.deploy-free{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.deploy-scene{width:100%;height:100%;max-width:500px}
+.free-drone{animation:droneFloat 4s ease-in-out infinite}
+.fd-1{animation-delay:0s}.fd-2{animation-delay:.7s}.fd-3{animation-delay:1.4s}.fd-4{animation-delay:2.1s}.fd-5{animation-delay:2.8s}
+@keyframes droneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.rotor-disc{animation:rotorPulse 0.15s linear infinite alternate}
+@keyframes rotorPulse{0%{opacity:0.3}100%{opacity:0.6}}
+
+/* Scan viz v2 */
+.scan-viz-v2{position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center}
+.scan-building{width:100%;height:100%}
+.scan-laser{animation:laserSweep 3s ease-in-out infinite}
+.sl-1{animation-delay:0s}.sl-2{animation-delay:1s}.sl-3{animation-delay:2s}
+@keyframes laserSweep{0%{transform:translateY(-30px);opacity:0}20%{opacity:0.7}80%{opacity:0.7}100%{transform:translateY(80px);opacity:0}}
+.defect-marker{animation:defectPulse 2s ease-in-out infinite}
+.dm-1{animation-delay:0.5s}.dm-2{animation-delay:1.5s}
+@keyframes defectPulse{0%,100%{opacity:0.4;transform:scale(0.9)}50%{opacity:1;transform:scale(1.1)}}
+.scan-drone-icon{animation:scanDroneMove 4s ease-in-out infinite}
+@keyframes scanDroneMove{0%,100%{transform:translate(60,15)}50%{transform:translate(220,15)}}
+
+/* Act on Intelligence */
+.act-intel-visual{position:relative;width:340px;height:340px;border-radius:var(--radius);overflow:visible}
+.act-intel-visual img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius);border:1px solid var(--card-border)}
+.how-img{width:100%;height:100%;object-fit:cover;filter:brightness(.7) saturate(.8)}
+.how-img-overlay{position:absolute;inset:0;border-radius:var(--radius);background:radial-gradient(ellipse at center,transparent 30%,rgba(241,246,249,.5) 100%);pointer-events:none}
+.ai-icon{position:absolute;display:flex;align-items:center;gap:.4rem;padding:.4rem .7rem;background:rgba(241,246,249,.95);border:1px solid var(--card-border);border-radius:100px;font-size:.65rem;font-weight:600;color:var(--white);box-shadow:0 4px 15px rgba(0,0,0,.08);backdrop-filter:blur(4px);white-space:nowrap;animation:iconFloat 3s ease-in-out infinite}
+.ai-icon-1{top:-10px;right:-20px;animation-delay:0s}
+.ai-icon-2{top:30%;left:-30px;animation-delay:.5s}
+.ai-icon-3{bottom:30%;right:-25px;animation-delay:1s}
+.ai-icon-4{bottom:-10px;left:-15px;animation-delay:1.5s}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 
 
 @media(max-width:900px){.caps-grid{grid-template-columns:1fr}}
@@ -201,6 +235,7 @@ a{color:inherit;text-decoration:none;cursor:none}
 .hsc-number{font-size:.65rem;font-weight:800;color:var(--accent);letter-spacing:.15em;margin-bottom:1rem}
 .hsc-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-.03em;margin-bottom:1rem;line-height:1.1}
 .hsc-desc{font-size:.88rem;color:var(--dim);line-height:1.7;margin-bottom:2rem}
+.hsc-desc .hw{display:inline-block;transition:color .2s}
 .hsc-facts{display:flex;gap:2rem}
 .hsc-fact{display:flex;flex-direction:column;gap:.15rem}
 .hsc-fact strong{font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,#0D4724,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -209,7 +244,7 @@ a{color:inherit;text-decoration:none;cursor:none}
 .how-scene-visual{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;height:100%}
 
 /* Deploy viz */
-.deploy-viz{position:relative;width:280px;height:280px;display:flex;align-items:center;justify-content:center}
+.deploy-viz{display:none}
 .dv-ring{position:absolute;border-radius:50%;border:1px solid rgba(119,185,64,.1)}
 .dv-r1{width:140px;height:140px;animation:deployRing 3s ease-out infinite}
 .dv-r2{width:200px;height:200px;animation:deployRing 3s ease-out infinite .8s}
@@ -252,8 +287,8 @@ a{color:inherit;text-decoration:none;cursor:none}
 /* ══════════════════════════════════
    PROOF
    ══════════════════════════════════ */
-.section-proof{position:relative;padding:10rem 0;overflow:hidden;background:var(--bg)}
-.section-proof h2{text-align:center;margin-bottom:4rem}
+.section-proof{position:relative;padding:5rem 0;overflow:hidden;background:var(--bg)}
+.section-proof h2{text-align:center;margin-bottom:3rem;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;letter-spacing:-.04em}
 
 .proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:5rem}
 .proof-card{position:relative;text-align:center;padding:2.5rem 1.5rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);overflow:hidden;transform-style:preserve-3d;will-change:transform;transition:border-color .4s}
@@ -264,7 +299,7 @@ a{color:inherit;text-decoration:none;cursor:none}
 .proof-card:hover .proof-glow{opacity:1}
 
 .ticker-wrap{overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 20%,black 80%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,black 20%,black 80%,transparent)}
-.ticker-track{display:flex;gap:3rem;animation:tick 30s linear infinite;width:max-content}
+.ticker-track{display:flex;gap:3rem;width:max-content}
 .ticker-track span{font-size:.85rem;font-weight:600;color:rgba(0,0,0,.06);white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
 @keyframes tick{to{transform:translateX(-50%)}}
 
