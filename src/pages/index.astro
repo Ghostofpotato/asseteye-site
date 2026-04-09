@@ -3,278 +3,315 @@ import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="AssetEye — AI-Powered Drone Inspections">
 
+  <!-- FIXED: Drone trail + ambient particles -->
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+
   <!-- NAV -->
   <nav class="nav">
     <div class="nav-logo">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <circle cx="16" cy="16" r="10" stroke="#0066ff" stroke-width="1.5"/>
-        <circle cx="16" cy="16" r="5" stroke="#00d4ff" stroke-width="1"/>
-        <circle cx="16" cy="16" r="2" fill="#00d4ff"/>
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="10" stroke="#77B940" stroke-width="1.5"/>
+        <circle cx="16" cy="16" r="5" stroke="#B1D794" stroke-width="1"/>
+        <circle cx="16" cy="16" r="2" fill="#B1D794"/>
       </svg>
       <span>AssetEye</span>
     </div>
-    <a href="#cta" class="nav-cta magnetic" data-magnetic>Book a Demo</a>
+    <div class="nav-center">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#process">Process</a>
+      <a href="#proof">Results</a>
+    </div>
+    <a href="#cta" class="nav-cta" data-magnetic>Book a Demo</a>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero section" data-bg="#0a0a0f">
-    <div class="hero-gradient"></div>
-    <div class="grid-overlay"></div>
+  <!-- ═══════ HERO ═══════ -->
+  <section class="hero" data-act="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-radial"></div>
+      <div class="hero-noise"></div>
+    </div>
     <div class="hero-content">
-      <h1 class="hero-headline split-text">
-        <span class="hero-line">See Everything.</span>
-        <span class="hero-line">Miss Nothing.</span>
+      <div class="spline-wrapper">
+        <canvas id="spline-canvas"></canvas>
+        <div class="spline-overlay"></div>
+        <div class="spline-fade"></div>
+      </div>
+      <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Now with AI-powered 3D modeling</div>
+      <h1 class="reveal-text">
+        <span class="rt-line"><span class="rt-inner">See Everything.</span></span>
+        <span class="rt-line"><span class="rt-inner">Miss Nothing.</span></span>
       </h1>
-      <p class="hero-sub parallax-layer" data-speed="0.5">AI-powered drone inspections for critical infrastructure</p>
-      <a href="#cta" class="hero-cta magnetic" data-magnetic>
-        <span>Discover More</span>
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M10 4v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </a>
+      <p class="hero-sub">Autonomous drone inspections that turn raw scans into 3D models, AI-powered defect reports, and actionable intelligence — in under 60 seconds.</p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-fill" data-magnetic><span>Book a Demo</span></a>
+        <a href="#capabilities" class="btn-outline" data-magnetic>
+          <span>Explore Capabilities</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0 0l-3-3m3 3l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="hero-proof">
+        <div class="hp-item"><strong>50,000+</strong> inspections</div>
+        <div class="hp-divider"></div>
+        <div class="hp-item"><strong>98.7%</strong> accuracy</div>
+        <div class="hp-divider"></div>
+        <div class="hp-item"><strong>12</strong> countries</div>
+      </div>
     </div>
-    <div class="scroll-indicator">
-      <div class="scroll-indicator-line"></div>
-    </div>
+    <div class="scroll-cue"><div class="scroll-cue-line"></div></div>
   </section>
 
-  <!-- PROBLEM -->
-  <section class="problem section" data-bg="#0c1425">
-    <div class="grid-overlay"></div>
+  <!-- ═══════ PROBLEM ═══════ -->
+  <section class="section-problem" data-act="problem">
     <div class="container">
-      <h2 class="section-headline split-text">Blind spots cost millions</h2>
-      <div class="stats-grid">
-        <div class="stat-card tilt-card">
-          <div class="stat-number" data-count="4.2" data-prefix="$" data-suffix="B" data-decimals="1">$0B</div>
-          <p class="stat-desc">lost annually to undetected infrastructure failures</p>
-          <div class="card-glow"></div>
+      <div class="problem-layout">
+        <div class="problem-left">
+          <p class="label">The Problem</p>
+          <h2 class="reveal-text">
+            <span class="rt-line"><span class="rt-inner">Traditional inspections</span></span>
+            <span class="rt-line"><span class="rt-inner">are broken.</span></span>
+          </h2>
+          <p class="sub-text">Manual methods are slow, dangerous, and miss up to 73% of critical defects. Infrastructure ages faster than teams can inspect it.</p>
         </div>
-        <div class="stat-card tilt-card">
-          <div class="stat-number" data-count="73" data-suffix="%">0%</div>
-          <p class="stat-desc">of inspections miss critical defects</p>
-          <div class="card-glow"></div>
-        </div>
-        <div class="stat-card tilt-card">
-          <div class="stat-number" data-count="2" data-suffix=" weeks">0 weeks</div>
-          <p class="stat-desc">average delay between inspection and action</p>
-          <div class="card-glow"></div>
+        <div class="problem-right">
+          <div class="p-stat">
+            <div class="p-stat-num" data-count="4.2" data-prefix="$" data-suffix="B" data-decimals="1">$0B</div>
+            <div class="p-stat-bar"><div class="p-stat-fill" data-w="85"></div></div>
+            <p>Lost annually to undetected failures</p>
+          </div>
+          <div class="p-stat">
+            <div class="p-stat-num" data-count="73" data-suffix="%">0%</div>
+            <div class="p-stat-bar"><div class="p-stat-fill" data-w="73"></div></div>
+            <p>Of inspections miss critical defects</p>
+          </div>
+          <div class="p-stat">
+            <div class="p-stat-num" data-count="14" data-suffix=" days">0 days</div>
+            <div class="p-stat-bar"><div class="p-stat-fill" data-w="55"></div></div>
+            <p>Average delay before action is taken</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PRODUCT SHOWCASE -->
-  <section class="showcase section" data-bg="#0a0a0f">
-    <div class="grid-overlay"></div>
-    <div class="showcase-wrapper">
-      <div class="showcase-screen">
-        <div class="screen-frame">
-          <div class="screen-topbar">
-            <span class="screen-dot"></span>
-            <span class="screen-dot"></span>
-            <span class="screen-dot"></span>
-          </div>
-          <div class="screen-content">
-            <div class="screen-sidebar">
-              <div class="screen-nav-item active"></div>
-              <div class="screen-nav-item"></div>
-              <div class="screen-nav-item"></div>
-              <div class="screen-nav-item"></div>
-            </div>
-            <div class="screen-main">
-              <div class="screen-chart">
-                <div class="chart-bar" style="--h:65%"></div>
-                <div class="chart-bar" style="--h:85%"></div>
-                <div class="chart-bar" style="--h:45%"></div>
-                <div class="chart-bar" style="--h:90%"></div>
-                <div class="chart-bar" style="--h:70%"></div>
-                <div class="chart-bar" style="--h:55%"></div>
-                <div class="chart-bar" style="--h:80%"></div>
-                <div class="chart-bar" style="--h:60%"></div>
-              </div>
-              <div class="screen-dots">
-                <div class="dot-cluster">
-                  <span class="data-dot" style="--x:20%;--y:30%"></span>
-                  <span class="data-dot" style="--x:45%;--y:60%"></span>
-                  <span class="data-dot" style="--x:70%;--y:25%"></span>
-                  <span class="data-dot" style="--x:30%;--y:70%"></span>
-                  <span class="data-dot" style="--x:80%;--y:50%"></span>
-                  <span class="data-dot" style="--x:55%;--y:40%"></span>
-                </div>
-              </div>
-              <div class="screen-scan-line"></div>
-            </div>
-          </div>
-        </div>
+  <!-- ═══════ CAPABILITIES — Interactive Cards with Video ═══════ -->
+  <section class="section-caps" id="capabilities" data-act="caps">
+    <div class="container">
+      <div class="caps-header">
+        <p class="label">Capabilities</p>
+        <h2 class="reveal-text">
+          <span class="rt-line"><span class="rt-inner">Everything you need.</span></span>
+          <span class="rt-line"><span class="rt-inner">Nothing you don't.</span></span>
+        </h2>
       </div>
-      <div class="showcase-features">
-        <div class="showcase-feature" data-feature="0">
-          <div class="feature-icon">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="20" r="16" stroke="#0066ff" stroke-width="1.5"/>
-              <path d="M14 20l4 4 8-8" stroke="#00d4ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+      <div class="caps-grid">
+        <!-- Card 1: AI Detection -->
+        <div class="cap-card" data-tilt>
+          <div class="cap-card-visual">
+            <img src="/asseteye-site/images/detect.jpg" alt="AI defect detection" class="cap-img" />
+            <div class="cap-img-overlay"></div>
+            <div class="detect-scanbar"></div>
           </div>
-          <h3>AI Detection</h3>
-          <p>Cracks, corrosion, thermal anomalies — detected in real-time with 98.7% accuracy.</p>
+          <div class="cap-card-body">
+            <div class="cap-tag">AI Engine</div>
+            <h3>Real-Time Defect Detection</h3>
+            <p>Computer vision trained on 2M+ infrastructure images. Identifies cracks, corrosion, deformation, thermal anomalies, and vegetation encroachment — as the drone flies.</p>
+            <div class="cap-metric"><span>98.7%</span> detection accuracy</div>
+          </div>
+          <div class="cap-card-glow"></div>
+          <div class="cap-card-border"></div>
         </div>
-        <div class="showcase-feature" data-feature="1">
-          <div class="feature-icon">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <rect x="8" y="8" width="24" height="24" rx="4" stroke="#0066ff" stroke-width="1.5"/>
-              <path d="M16 20h8M20 16v8" stroke="#00d4ff" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+
+        <!-- Card 2: 3D Modeling -->
+        <div class="cap-card" data-tilt>
+          <div class="cap-card-visual">
+            <img src="/asseteye-site/images/model.jpg" alt="3D photogrammetry model" class="cap-img" />
+            <div class="cap-img-overlay"></div>
           </div>
-          <h3>Autonomous Scanning</h3>
-          <p>Program flight paths once. Drones handle the rest, rain or shine.</p>
+          <div class="cap-card-body">
+            <div class="cap-tag">3D Engine</div>
+            <h3>Photogrammetric 3D Modeling</h3>
+            <p>Thousands of aerial images stitched into centimeter-accurate 3D models. Measure, annotate, and share digital twins of any asset — bridge, tower, pipeline, or roof.</p>
+            <div class="cap-metric"><span>±2cm</span> model accuracy</div>
+          </div>
+          <div class="cap-card-glow"></div>
+          <div class="cap-card-border"></div>
         </div>
-        <div class="showcase-feature" data-feature="2">
-          <div class="feature-icon">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <path d="M12 28V16l8-6 8 6v12" stroke="#0066ff" stroke-width="1.5" stroke-linejoin="round"/>
-              <path d="M18 28v-6h4v6" stroke="#00d4ff" stroke-width="1.5"/>
-            </svg>
+
+        <!-- Card 3: Automated Reports -->
+        <div class="cap-card" data-tilt>
+          <div class="cap-card-visual">
+            <img src="/asseteye-site/images/report.jpg" alt="AI-generated inspection reports" class="cap-img" />
+            <div class="cap-img-overlay"></div>
           </div>
-          <h3>Instant Reports</h3>
-          <p>From raw scan to actionable PDF in under 60 seconds. No waiting.</p>
+          <div class="cap-card-body">
+            <div class="cap-tag">Reports</div>
+            <h3>Instant AI-Generated Reports</h3>
+            <p>From raw drone data to prioritized, actionable PDF reports with annotated images, severity scores, GPS coordinates, and recommended actions — in under 60 seconds.</p>
+            <div class="cap-metric"><span>&lt; 60s</span> scan to report</div>
+          </div>
+          <div class="cap-card-glow"></div>
+          <div class="cap-card-border"></div>
+        </div>
+
+        <!-- Card 4: Autonomous Flight -->
+        <div class="cap-card" data-tilt>
+          <div class="cap-card-visual">
+            <img src="/asseteye-site/images/flight.jpg" alt="Autonomous drone flight" class="cap-img" />
+            <div class="cap-img-overlay"></div>
+          </div>
+          <div class="cap-card-body">
+            <div class="cap-tag">Autonomy</div>
+            <h3>Fully Autonomous Flight</h3>
+            <p>Program flight paths once. GPS-guided drones execute missions autonomously — obstacle avoidance, wind compensation, and battery-swap coordination built in.</p>
+            <div class="cap-metric"><span>100%</span> autonomous operation</div>
+          </div>
+          <div class="cap-card-glow"></div>
+          <div class="cap-card-border"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="how section" data-bg="#0c1425">
-    <div class="how-header">
-      <h2 class="section-headline split-text">How It Works</h2>
-    </div>
-    <div class="how-track-wrapper">
-      <div class="how-track">
-        <div class="how-step" data-step="0">
-          <div class="step-visual">
-            <div class="drone-icon">
-              <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                <line x1="20" y1="30" x2="35" y2="38" stroke="#0066ff" stroke-width="1.5"/>
-                <line x1="60" y1="30" x2="45" y2="38" stroke="#0066ff" stroke-width="1.5"/>
-                <line x1="20" y1="50" x2="35" y2="42" stroke="#0066ff" stroke-width="1.5"/>
-                <line x1="60" y1="50" x2="45" y2="42" stroke="#0066ff" stroke-width="1.5"/>
-                <rect x="32" y="35" width="16" height="10" rx="3" fill="#0066ff"/>
-                <circle cx="20" cy="30" r="6" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
-                <circle cx="60" cy="30" r="6" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
-                <circle cx="20" cy="50" r="6" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
-                <circle cx="60" cy="50" r="6" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
+  <!-- ═══════ HOW IT WORKS — Pinned cinematic scroll ═══════ -->
+  <section class="section-how" id="process" data-act="how">
+    <div class="how-pin">
+      <div class="how-scene active" data-scene="0">
+        <div class="how-scene-bg"><canvas class="scene-cv" data-sid="0"></canvas></div>
+        <div class="how-scene-content">
+          <div class="hsc-number">01</div>
+          <h3 class="hsc-title">Deploy Your Fleet</h3>
+          <p class="hsc-desc">One tap. AI calculates optimal flight paths for complete coverage. Your drone fleet launches autonomously, adapting to weather and terrain in real-time.</p>
+          <div class="hsc-facts">
+            <div class="hsc-fact"><strong>12 min</strong><span>avg. deployment</span></div>
+            <div class="hsc-fact"><strong>100%</strong><span>area coverage</span></div>
+          </div>
+        </div>
+        <div class="how-scene-visual">
+          <div class="deploy-viz">
+            <div class="dv-ring dv-r1"></div>
+            <div class="dv-ring dv-r2"></div>
+            <div class="dv-ring dv-r3"></div>
+            <div class="dv-core">
+              <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                <rect x="22" y="26" width="16" height="8" rx="3" fill="#77B940"/>
+                <line x1="15" y1="22" x2="24" y2="27" stroke="#77B940" stroke-width="1.5"/>
+                <line x1="45" y1="22" x2="36" y2="27" stroke="#77B940" stroke-width="1.5"/>
+                <line x1="15" y1="38" x2="24" y2="33" stroke="#77B940" stroke-width="1.5"/>
+                <line x1="45" y1="38" x2="36" y2="33" stroke="#77B940" stroke-width="1.5"/>
+                <circle cx="15" cy="22" r="4" stroke="#B1D794" stroke-width="1" fill="none"/>
+                <circle cx="45" cy="22" r="4" stroke="#B1D794" stroke-width="1" fill="none"/>
+                <circle cx="15" cy="38" r="4" stroke="#B1D794" stroke-width="1" fill="none"/>
+                <circle cx="45" cy="38" r="4" stroke="#B1D794" stroke-width="1" fill="none"/>
               </svg>
             </div>
           </div>
-          <div class="step-number">01</div>
-          <h3>Deploy</h3>
-          <p>Launch your drone fleet with one click. AI plans the optimal flight path for full coverage.</p>
         </div>
-        <div class="how-connector">
-          <svg class="connector-line" viewBox="0 0 200 4" preserveAspectRatio="none">
-            <line x1="0" y1="2" x2="200" y2="2" stroke="#0066ff" stroke-width="2" stroke-dasharray="6 4"/>
-          </svg>
-        </div>
-        <div class="how-step" data-step="1">
-          <div class="step-visual">
-            <div class="scan-rings">
-              <div class="scan-ring"></div>
-              <div class="scan-ring"></div>
-              <div class="scan-ring"></div>
-              <div class="scan-center"></div>
-            </div>
+      </div>
+      <div class="how-scene" data-scene="1">
+        <div class="how-scene-bg"><canvas class="scene-cv" data-sid="1"></canvas></div>
+        <div class="how-scene-content">
+          <div class="hsc-number">02</div>
+          <h3 class="hsc-title">AI-Powered Scanning</h3>
+          <p class="hsc-desc">Multi-spectrum sensors capture every surface while onboard AI processes gigabytes of imagery mid-flight. Defects are classified and geotagged instantly.</p>
+          <div class="hsc-facts">
+            <div class="hsc-fact"><strong>98.7%</strong><span>detection rate</span></div>
+            <div class="hsc-fact"><strong>6 types</strong><span>of defects</span></div>
           </div>
-          <div class="step-number">02</div>
-          <h3>Scan</h3>
-          <p>Multi-spectrum sensors capture every surface. AI processes data in real-time as the drone flies.</p>
         </div>
-        <div class="how-connector">
-          <svg class="connector-line" viewBox="0 0 200 4" preserveAspectRatio="none">
-            <line x1="0" y1="2" x2="200" y2="2" stroke="#0066ff" stroke-width="2" stroke-dasharray="6 4"/>
-          </svg>
-        </div>
-        <div class="how-step" data-step="2">
-          <div class="step-visual">
-            <div class="dashboard-icon">
-              <div class="dash-bar" style="--h:60%"></div>
-              <div class="dash-bar" style="--h:85%"></div>
-              <div class="dash-bar" style="--h:40%"></div>
-              <div class="dash-bar" style="--h:70%"></div>
-              <div class="dash-notif">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 2l6 10H2z" fill="#00d4ff"/>
-                </svg>
-              </div>
-            </div>
+        <div class="how-scene-visual">
+          <div class="scan-viz">
+            <div class="sv-radar"></div>
+            <div class="sv-ping" style="--px:30%;--py:40%"></div>
+            <div class="sv-ping" style="--px:65%;--py:25%"></div>
+            <div class="sv-ping" style="--px:50%;--py:70%"></div>
+            <div class="sv-ping" style="--px:80%;--py:55%"></div>
+            <div class="sv-sweep"></div>
           </div>
-          <div class="step-number">03</div>
-          <h3>Act</h3>
-          <p>Get prioritized alerts and full PDF reports. Know exactly where to send your maintenance crews.</p>
+        </div>
+      </div>
+      <div class="how-scene" data-scene="2">
+        <div class="how-scene-bg"><canvas class="scene-cv" data-sid="2"></canvas></div>
+        <div class="how-scene-content">
+          <div class="hsc-number">03</div>
+          <h3 class="hsc-title">Act on Intelligence</h3>
+          <p class="hsc-desc">Prioritized alerts, annotated 3D models, and full PDF reports land in your dashboard before the drone touches down. Your crew knows exactly where to go.</p>
+          <div class="hsc-facts">
+            <div class="hsc-fact"><strong>&lt; 60s</strong><span>to full report</span></div>
+            <div class="hsc-fact"><strong>3D</strong><span>digital twin</span></div>
+          </div>
+        </div>
+        <div class="how-scene-visual">
+          <div class="act-intel-visual">
+            <img src="/asseteye-site/images/act-intel.jpg" alt="Team acting on drone intelligence" class="how-img" />
+            <div class="how-img-overlay"></div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="how-dots">
+      <span class="how-dot active"></span>
+      <span class="how-dot"></span>
+      <span class="how-dot"></span>
+    </div>
   </section>
 
-  <!-- TRUST -->
-  <section class="trust section" data-bg="#0a0a0f">
-    <div class="grid-overlay"></div>
+  <!-- ═══════ PROOF / TRUST ═══════ -->
+  <section class="section-proof" id="proof" data-act="proof">
     <div class="container">
-      <h2 class="section-headline split-text">Trusted by teams who can't afford to miss anything</h2>
-      <div class="logo-ticker">
-        <div class="ticker-track">
-          <span class="ticker-logo">Meridian Energy</span>
-          <span class="ticker-logo">Nordic Infrastructure</span>
-          <span class="ticker-logo">Atlas Pipeline Co.</span>
-          <span class="ticker-logo">SolarGrid EU</span>
-          <span class="ticker-logo">BridgeWatch Inc.</span>
-          <span class="ticker-logo">Meridian Energy</span>
-          <span class="ticker-logo">Nordic Infrastructure</span>
-          <span class="ticker-logo">Atlas Pipeline Co.</span>
-          <span class="ticker-logo">SolarGrid EU</span>
-          <span class="ticker-logo">BridgeWatch Inc.</span>
+      <p class="label">Proven at Scale</p>
+      <h2 class="reveal-text">
+        <span class="rt-line"><span class="rt-inner">Numbers don't lie.</span></span>
+      </h2>
+      <div class="proof-grid">
+        <div class="proof-card" data-tilt>
+          <div class="proof-num" data-count="50000" data-suffix="+">0+</div>
+          <p>inspections completed</p>
+          <div class="proof-glow"></div>
+        </div>
+        <div class="proof-card" data-tilt>
+          <div class="proof-num" data-count="98.7" data-suffix="%" data-decimals="1">0%</div>
+          <p>detection accuracy</p>
+          <div class="proof-glow"></div>
+        </div>
+        <div class="proof-card" data-tilt>
+          <div class="proof-num" data-count="12">0</div>
+          <p>countries deployed</p>
+          <div class="proof-glow"></div>
+        </div>
+        <div class="proof-card" data-tilt>
+          <div class="proof-num" data-raw="< 60s">&lt; 60s</div>
+          <p>to actionable report</p>
+          <div class="proof-glow"></div>
         </div>
       </div>
-      <div class="metrics-grid">
-        <div class="metric-card tilt-card">
-          <div class="metric-number" data-count="50000" data-suffix="+">0+</div>
-          <p>inspections completed</p>
-          <div class="card-glow"></div>
-        </div>
-        <div class="metric-card tilt-card">
-          <div class="metric-number" data-count="98.7" data-suffix="%" data-decimals="1">0%</div>
-          <p>detection accuracy</p>
-          <div class="card-glow"></div>
-        </div>
-        <div class="metric-card tilt-card">
-          <div class="metric-number" data-count="12">0</div>
-          <p>countries</p>
-          <div class="card-glow"></div>
-        </div>
-        <div class="metric-card tilt-card">
-          <div class="metric-number" data-raw="< 60s">&lt; 60s</div>
-          <p>to report</p>
-          <div class="card-glow"></div>
+      <div class="ticker-wrap">
+        <div class="ticker-track">
+          <span>Meridian Energy</span><span>Nordic Infrastructure</span><span>Atlas Pipeline Co.</span>
+          <span>SolarGrid EU</span><span>BridgeWatch Inc.</span><span>TowerLink Global</span>
+          <span>Meridian Energy</span><span>Nordic Infrastructure</span><span>Atlas Pipeline Co.</span>
+          <span>SolarGrid EU</span><span>BridgeWatch Inc.</span><span>TowerLink Global</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta section" id="cta" data-bg="#0a0a0f">
-    <div class="dot-grid" aria-hidden="true"></div>
-    <div class="cta-content">
-      <h2 class="cta-headline split-text">Ready to see what you're missing?</h2>
-      <a href="mailto:hello@asseteye.io" class="cta-button magnetic" data-magnetic>
-        <span class="cta-button-text">Book a Demo</span>
-        <span class="cta-button-ripple"></span>
-      </a>
+  <!-- ═══════ CTA ═══════ -->
+  <section class="section-cta" id="cta" data-act="cta">
+    <div class="cta-wrap">
+      <h2 class="reveal-text cta-headline">
+        <span class="rt-line"><span class="rt-inner">Ready to see what</span></span>
+        <span class="rt-line"><span class="rt-inner">you've been missing?</span></span>
+      </h2>
+      <p class="cta-sub">Join the infrastructure teams that trust AssetEye to protect their most critical assets.</p>
+      <a href="mailto:hello@asseteye.io" class="btn-fill btn-lg" data-magnetic><span>Book a Demo</span></a>
     </div>
     <footer class="footer">
-      <div class="footer-links">
-        <a href="mailto:hello@asseteye.io">Contact</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">Privacy</a>
+      <div class="footer-row">
+        <div class="f-brand"><svg width="20" height="20" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="#77B940" stroke-width="1.5"/><circle cx="16" cy="16" r="2" fill="#B1D794"/></svg> AssetEye</div>
+        <div class="f-links"><a href="mailto:hello@asseteye.io">Contact</a><a href="#">LinkedIn</a><a href="#">Privacy</a></div>
+        <div class="f-copy">&copy; 2026 AssetEye</div>
       </div>
-      <p class="footer-copy">&copy; 2026 AssetEye. All rights reserved.</p>
     </footer>
   </section>
 

@@ -26,6 +26,23 @@ const base = import.meta.env.BASE_URL;
   <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script is:inline src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
   <script is:inline src="/asseteye-site/scripts/main.js"></script>
+  <script is:inline type="module">
+    import { Application } from 'https://unpkg.com/@splinetool/runtime@1.9.28/build/runtime.js';
+    var c = document.getElementById('spline-canvas');
+    if (c) {
+      // Block zoom/scroll/drag but mousemove passes through for tracking
+      c.addEventListener('wheel', function(e) { e.preventDefault(); e.stopPropagation(); window.scrollBy(0, e.deltaY); }, { passive: false });
+      c.addEventListener('mousedown', function(e) { e.preventDefault(); e.stopPropagation(); }, true);
+      c.addEventListener('pointerdown', function(e) { e.preventDefault(); e.stopPropagation(); }, true);
+      c.addEventListener('touchstart', function(e) { e.preventDefault(); e.stopPropagation(); }, { passive: false, capture: true });
+      c.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+      var app = new Application(c);
+      app.load('/asseteye-site/scene.splinecode').then(function() {
+        c.parentElement.classList.add('loaded');
+      }).catch(function(e) { console.warn('Spline:', e); });
+    }
+  </script>
 </body>
 </html>
 <style is:global>
